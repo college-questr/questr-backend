@@ -67,3 +67,6 @@ typings/
 .env.test.local
 .env.production.local
 .env*
+
+
+package-lock.json
