@@ -66,7 +66,7 @@
 
 ## Mutations
 
-####### addQuestion(user_id:<user_id>,questionTitle:"<questionTitle>", questionBody:"<questionBody>",votes: 0 )
+###### addQuestion(user_id:<user_id>,questionTitle:"questionTitle", questionBody:"questionBody",votes: 0 )
 
 - should add a question to the question collection
 
@@ -81,7 +81,7 @@
                 createdAt: { type: GraphQLString }
         }
 
-####### AddAnswer(question_id:<question_id>,user_id:<user_id>, answer:"<answer>",votes: 0 )
+###### AddAnswer(question_id:<question_id>,user_id:<user_id>,answer:"answer",votes: 0 )
 
         type:AnswerType,
         args:{
