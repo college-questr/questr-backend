@@ -3,14 +3,26 @@
 
 ## Schemas
 
-###### questions
+###### Questions
         id: { type: GraphQLID },
         questionTitle: { type: GraphQLString },
         questionBody: { type: GraphQLString },
         votes: { type: GraphQLInt },
         createdBy: { type: GraphQLString },
-        createdAt: { type: GraphQLString },
+        createdAt: { type: GraphQLString }
         
+###### Tags
+        question_id: { type: GraphQLID },
+        tag: { type: GraphQLString }
+
+###### Answers
+        id: { type: GraphQLID },
+        answer: { type: GraphQLString },
+        question_id: { type: GraphQLID },
+        votes: { type: GraphQLInt },
+        AnsweredBy: { type: GraphQLString },
+        createdAt: { type: GraphQLString }
+
 
 ## Root Queries
   
