@@ -37,7 +37,7 @@
          
 ###### questions 
 
-- should return all questions
+- should return a list of all questions
 
          type: QuestionType,
          args: {}
@@ -52,9 +52,17 @@
          
 ###### answers
 
-- should return all answers
+- should return a list of all answers
 
          type: AnswerType,
+         args: {}
+
+
+###### tags
+
+- should return a list of all tags
+
+         type: TagType,
          args: {}
 
   
