@@ -9,7 +9,8 @@
         questionBody: { type: GraphQLString },
         votes: { type: GraphQLInt },
         createdBy: { type: GraphQLString },
-        createdAt: { type: GraphQLString }
+        createdAt: { type: GraphQLString },
+        user_id
         
 ###### Tags
         question_id: { type: GraphQLID },
