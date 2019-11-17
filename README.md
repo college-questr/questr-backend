@@ -5,12 +5,12 @@
 
 ###### Questions
         id: { type: GraphQLID },
+        user_id: { type: GraphQLID },
         questionTitle: { type: GraphQLString },
         questionBody: { type: GraphQLString },
         votes: { type: GraphQLInt },
         createdBy: { type: GraphQLString },
-        createdAt: { type: GraphQLString },
-        user_id
+        createdAt: { type: GraphQLString }
         
 ###### Tags
         question_id: { type: GraphQLID },
@@ -18,10 +18,11 @@
 
 ###### Answers
         id: { type: GraphQLID },
-        answer: { type: GraphQLString },
         question_id: { type: GraphQLID },
+        user_id: { type: GraphQLID },
+        answer: { type: GraphQLString },
         votes: { type: GraphQLInt },
-        AnsweredBy: { type: GraphQLString },
+        user_id: { type: GraphQLID },
         createdAt: { type: GraphQLString }
 
 
