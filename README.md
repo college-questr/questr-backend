@@ -27,8 +27,36 @@
 
 
 ## Root Queries
+       
+###### question(id)
 
+- should return all questions by id with all answers associated to the question id
+
+         type: QuestionType,
+         args: { id: { type: GraphQLInt } }
+         
+###### questions 
+
+- should return all questions
+
+         type: QuestionType,
+         args: {}
+         
+         
+###### answer(id)
+
+- should return answers by user_id
         
+         type: AnswerType,
+         args: { id: { type: GraphQLInt } }
+         
+###### answers
+
+- should return all answers
+
+         type: AnswerType,
+         args: {}
+
   
 
 ## Built with
