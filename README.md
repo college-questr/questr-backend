@@ -66,9 +66,9 @@
 
 ## Mutations
 
-###### addQuestion(user_id:<user_id>,questionTitle:"questionTitle", questionBody:"questionBody",votes: 0 )
+###### addQuestion(user_id:<user_id>,questionTitle:"questionTitle", questionBody:"questionBody" )
 
-- should add a question to the question collection
+- should add a question to the question collection, **votes** field should be defaulted as 0 when creating a new question with mongoDb
 
         type:QuestionType,
         args:{
@@ -76,12 +76,13 @@
                 user_id: { type: GraphQLID },
                 questionTitle: { type: new GraphQLNonNull(GraphQLString) },
                 questionBody: { type: new GraphQLNonNull(GraphQLString) },
-                votes: { type: new GraphQLNonNul(GraphQLInt) },
                 createdBy: { type: GraphQLString },
                 createdAt: { type: GraphQLString }
         }
 
-###### AddAnswer(question_id:<question_id>,user_id:<user_id>,answer:"answer",votes: 0 )
+###### AddAnswer(question_id:<question_id>,user_id:<user_id>,answer:"answer" )
+
+-this should add an answer to a specific question,  **votes** field should be defaulted as 0 when creating a new question with mongoDb
 
         type:AnswerType,
         args:{
@@ -89,12 +90,19 @@
                 question_id: { type: new GraphQLNonNull(GraphQLID) },
                 user_id: { type: new GraphQLNonNull(GraphQLID) },
                 answer: { type: new GraphQLNonNull(GraphQLString) },
-                votes: { type: new GraphQLNonNull(GraphQLInt) },
                 createdAt: { type: GraphQLString }
        }
        
+###### AddTag(question_id:question_id, tag:"some tag")
 
 
+        type:TagType,
+        args:{
+                question_id: { type: new GraphQLNonNull(GraphQLID) },
+                tag: { type: new GraphQLNonNull(GraphQLString) }
+        }
+        
+      
 ## Built with
 
   - Node.js
