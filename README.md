@@ -22,7 +22,6 @@
         user_id: { type: GraphQLID },
         answer: { type: GraphQLString },
         votes: { type: GraphQLInt },
-        user_id: { type: GraphQLID },
         createdAt: { type: GraphQLString }
 
 
@@ -65,7 +64,36 @@
          type: TagType,
          args: {}
 
-  
+## Mutations
+
+####### addQuestion(user_id:<user_id>,questionTitle:"<questionTitle>", questionBody:"<questionBody>",votes: 0 )
+
+- should add a question to the question collection
+
+        type:QuestionType,
+        args:{
+                id: { type: GraphQLID },
+                user_id: { type: GraphQLID },
+                questionTitle: { type: new GraphQLNonNull(GraphQLString) },
+                questionBody: { type: new GraphQLNonNull(GraphQLString) },
+                votes: { type: new GraphQLNonNul(GraphQLInt) },
+                createdBy: { type: GraphQLString },
+                createdAt: { type: GraphQLString }
+        }
+
+####### AddAnswer(question_id:<question_id>,user_id:<user_id>, answer:"<answer>",votes: 0 )
+
+        type:AnswerType,
+        args:{
+                id: { type: GraphQLID },
+                question_id: { type: new GraphQLNonNull(GraphQLID) },
+                user_id: { type: new GraphQLNonNull(GraphQLID) },
+                answer: { type: new GraphQLNonNull(GraphQLString) },
+                votes: { type: new GraphQLNonNull(GraphQLInt) },
+                createdAt: { type: GraphQLString }
+       }
+       
+
 
 ## Built with
 
