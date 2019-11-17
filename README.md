@@ -1,15 +1,18 @@
 # questr-backend
 
 
-## endpoints
+## Schemas
 
-  -`/api/questions`
-  
-  -`/api/questions/:id`
-  
-  -`/api/answers`
-  
-  -`/api/answers/question/:id`
+###### questions
+        id: { type: GraphQLID },
+        questionTitle: { type: GraphQLString },
+        questionBody: { type: GraphQLString },
+        votes: { type: GraphQLInt },
+        createdBy: { type: GraphQLString },
+        createdAt: { type: GraphQLString },
+        
+
+## Root Queries
   
 ## collections
 
@@ -18,4 +21,4 @@
   - Node.js
   - Express
   - MongoDb
-  
+  - GraphQL
