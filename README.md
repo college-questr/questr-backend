@@ -34,6 +34,8 @@
          type: QuestionType,
          args: { id: { type: GraphQLID } }
          
+         ---- this query should return all the fileds by question_id ----
+         
            {
                 question(id: "a12312asd") {
                     user_id
@@ -63,6 +65,7 @@
 
          type: QuestionType,
          
+         ---- this query should return all the questions with  ----
          
             {
                 question{
