@@ -41,7 +41,7 @@
                     questionBody
                     votes
                     createdAt
-                    answers(question_id: "a12312asd"){
+                    answers{
                         id
                         question_id
                         user_id
