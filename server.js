@@ -10,7 +10,7 @@ server.use(express.json());
 
 server.use('/graphql', graphqlHTTP({
   schema,
-  graphical: true
+  graphiql: true
 }));
 
 module.exports = server;
