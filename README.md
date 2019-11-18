@@ -14,6 +14,8 @@
         votes: { type: GraphQLInt },
         createdBy: { type: GraphQLString },
         createdAt: { type: GraphQLString }
+
+        
         
 ###### Tags
         question_id: { type: GraphQLID },
