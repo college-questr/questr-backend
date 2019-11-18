@@ -34,20 +34,79 @@
          type: QuestionType,
          args: { id: { type: GraphQLInt } }
          
+           {
+                question(id: "a12312asd") {
+                    user_id
+                    questionTitle
+                    questionBody
+                    votes
+                    createdAt
+                    answers(question_id: "a12312asd"){
+                        id
+                        question_id
+                        user_id
+                        answer
+                        votes
+                        createdAt
+                    }
+                    tags{
+                        tag
+                    }
+                    
+                    
+                }
+            }
+         
 ###### questions 
 
-- should return a list of all questions
+- should return a list of all questions with all answers attached to each question
 
          type: QuestionType,
-         args: {}
          
+         
+            {
+                question{
+                    user_id
+                    questionTitle
+                    questionBody
+                    votes
+                    createdAt
+                    answers{
+                        id
+                        question_id
+                        user_id
+                        answer
+                        votes
+                        createdAt
+                    }
+                    tags{
+                        tag
+                    }
+                }
+            }
+
          
 ###### answer(id)
 
 - should return answers by user_id
         
          type: AnswerType,
-         args: { id: { type: GraphQLInt } }
+         args: { question_id: { type: GraphQLInt } }
+         
+
+            {
+                answer(question_id: "a12312asd") {
+                        id
+                        question_id
+                        user_id
+                        answer
+                        votes
+                        createdAt
+                }
+            }
+
+
+
          
 ###### answers
 
