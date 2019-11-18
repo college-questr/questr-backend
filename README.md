@@ -32,7 +32,7 @@
 - should return all questions by id with all answers associated to the question id
 
          type: QuestionType,
-         args: { id: { type: GraphQLInt } }
+         args: { id: { type: GraphQLID } }
          
            {
                 question(id: "a12312asd") {
@@ -91,7 +91,7 @@
 - should return answers by user_id
         
          type: AnswerType,
-         args: { question_id: { type: GraphQLInt } }
+         args: { question_id: { type: GraphQLID } }
          
 
             {
@@ -120,8 +120,8 @@
 
 - should return a list of all tags
 
-         type: TagType,
-         args: {}
+        type: TagType,
+        args: { question_id: { type: GraphQLID } }
 
 ## Mutations
 
