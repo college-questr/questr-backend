@@ -13,4 +13,8 @@ server.use('/graphql', graphqlHTTP({
   graphiql: true
 }));
 
+server.get('/', (req, res) => {
+  res.send('<h3>Server is up and running</h3>');
+});
+
 module.exports = server;
