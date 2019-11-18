@@ -4,9 +4,9 @@ const Question = require('../models/questionModel');
 const Answer = require('../models/answerModel');
 const Tags = require('../models/tagModel');
 
-const { 
-    GraphQLObjectType, 
-    GraphQLString, 
+const {
+    GraphQLObjectType,
+    GraphQLString,
     GraphQLSchema,
     GraphQLID,
     GraphQLInt,
@@ -52,7 +52,7 @@ const AnswerType = new GraphQLObjectType({
         createdAt: { type: GraphQLString },
         question: {
             type: QuestionType,
-            resolve(parent, args){
+            resolve(parent, args) {
                 // return _.find(questions, { answer_id: parent.id });
                 return Question.findById(parent.answer_id);
             }
@@ -80,7 +80,7 @@ const RootQuery = new GraphQLObjectType({
     fields: {
         question: {
             type: QuestionType,
-            args: { id: { type: GraphQLInt } },
+            args: { id: { type: GraphQLString } },
             resolve(parent, args) {
                 //Code to get data from db / other source
                 // return _.find(questions, { id: args.id})                
@@ -151,7 +151,7 @@ const Mutation = new GraphQLObjectType({
         addAnswer: {
             type: AnswerType,
             args: {
-                user_id: { type:  GraphQLID},
+                user_id: { type: GraphQLID },
                 question_id: { type: new GraphQLNonNull(GraphQLString) },
                 answer: { type: new GraphQLNonNull(GraphQLString) },
                 votes: { type: GraphQLInt },
