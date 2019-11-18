@@ -68,7 +68,7 @@
 
          type: QuestionType,
          
-         ---- this query should return all the questions with  ----
+         ---- this query should return all the questions ----
          
             {
                 question{
@@ -99,7 +99,7 @@
          type: AnswerType,
          args: { question_id: { type: GraphQLID } }
          
-
+         ---- should return all answers given question_id ----
             {
                 answer(question_id: "a12312asd") {
                         id
@@ -120,7 +120,18 @@
 
          type: AnswerType,
          args: {}
-
+         
+         ---- return all answers ----
+            {
+                answer {
+                        id
+                        question_id
+                        user_id
+                        answer
+                        votes
+                        createdAt
+                }
+            }
 
 ###### tags
 
@@ -128,6 +139,19 @@
 
         type: TagType,
         args: { question_id: { type: GraphQLID } }
+        
+        {
+            tags{
+               tag
+               question{
+                    user_id
+                    questionTitle
+                    questionBody
+                    votes
+                    createdAt
+                }
+            
+        }
 
 ## Mutations
 
