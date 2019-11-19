@@ -27,10 +27,7 @@ const QuestionType = new GraphQLObjectType({
         questionBody: { type: GraphQLString },
         votes: { type: GraphQLInt },
         createdBy: { type: GraphQLString },
-        createdAt: {
-            type: GraphQLDateTime,
-            resolve: () => new Date(Date.now())
-        },
+        createdAt: {type: GraphQLDateTime},
         answer: {
             type: new GraphQLList(AnswerType),
             resolve(parent, args) {
@@ -56,10 +53,7 @@ const AnswerType = new GraphQLObjectType({
         answer: { type: GraphQLString },
         votes: { type: GraphQLInt },
         answeredBy: { type: GraphQLID },
-        createdAt: {
-            type: GraphQLDateTime,
-            resolve: () => new Date(Date.now())
-        },
+        createdAt: {type: GraphQLDateTime},
         question: {
             type: QuestionType,
             resolve(parent, args) {
