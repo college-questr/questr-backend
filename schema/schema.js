@@ -165,14 +165,15 @@ const Mutation = new GraphQLObjectType({
                 user_id: { type: GraphQLID },
                 question_id: { type: new GraphQLNonNull(GraphQLString) },
                 answer: { type: new GraphQLNonNull(GraphQLString) },
-                votes: { type: new GraphQLNonNull(GraphQLInt) },
-                createdAt: { type: GraphQLString }
+                votes: { type: GraphQLInt },
+                createdAt: { type: GraphQLDateTime }
             },
             resolve(parent, args) {
                 let answerQuestion = new Answer({
                     answer: args.answer,
-                    votes: args.votes,
-                    question_id: args.question_id
+                    votes: args.votes == undefined ? 0 : args.votes,
+                    question_id: args.question_id,
+                    createdAt: new Date().toISOString()
                 });
                 return answerQuestion.save()
             }
