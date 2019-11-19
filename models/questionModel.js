@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 const questionSchema = new Schema({
     user_id: String,
     tag_id: String,
-    questionTitle: String,
-    questionBody: String,
+    questionTitle: {type:String, text:true},
+    questionBody: {type:String, text:true},
     votes: Number,
     createdAt: String
 });

@@ -21,25 +21,43 @@ const {
 const QuestionType = new GraphQLObjectType({
     name: "Question",
     fields: () => ({
-        id: { type: GraphQLID },
-        user_id: { type: GraphQLID },
-        questionTitle: { type: GraphQLString },
-        questionBody: { type: GraphQLString },
-        votes: { type: GraphQLInt },
-        createdBy: { type: GraphQLString },
-        createdAt: {type: GraphQLDateTime},
+        id: {
+            type: GraphQLID
+        },
+        user_id: {
+            type: GraphQLID
+        },
+        questionTitle: {
+            type: GraphQLString
+        },
+        questionBody: {
+            type: GraphQLString
+        },
+        votes: {
+            type: GraphQLInt
+        },
+        createdBy: {
+            type: GraphQLString
+        },
+        createdAt: {
+            type: GraphQLDateTime
+        },
         answer: {
             type: new GraphQLList(AnswerType),
             resolve(parent, args) {
                 // return _.filter(answers, { question_id: parent.id })
-                return Answer.find({ question_id: parent.id });
+                return Answer.find({
+                    question_id: parent.id
+                });
             }
         },
         tag: {
             type: new GraphQLList(TagType),
             resolve(parent, args) {
                 // return _.filter(tags, { question_id: parent.id })
-                return Tags.find({ question_id: parent.id });
+                return Tags.find({
+                    question_id: parent.id
+                });
             }
         }
     })
@@ -48,12 +66,24 @@ const QuestionType = new GraphQLObjectType({
 const AnswerType = new GraphQLObjectType({
     name: "Answer",
     fields: () => ({
-        id: { type: GraphQLID },
-        user_id: { type: GraphQLID },
-        answer: { type: GraphQLString },
-        votes: { type: GraphQLInt },
-        answeredBy: { type: GraphQLID },
-        createdAt: {type: GraphQLDateTime},
+        id: {
+            type: GraphQLID
+        },
+        user_id: {
+            type: GraphQLID
+        },
+        answer: {
+            type: GraphQLString
+        },
+        votes: {
+            type: GraphQLInt
+        },
+        answeredBy: {
+            type: GraphQLID
+        },
+        createdAt: {
+            type: GraphQLDateTime
+        },
         question: {
             type: QuestionType,
             resolve(parent, args) {
@@ -67,13 +97,19 @@ const AnswerType = new GraphQLObjectType({
 const TagType = new GraphQLObjectType({
     name: "Tag",
     fields: () => ({
-        question_id: { type: GraphQLID },
-        tag: { type: GraphQLString },
+        question_id: {
+            type: GraphQLID
+        },
+        tag: {
+            type: GraphQLString
+        },
         question: {
             type: new GraphQLList(QuestionType),
             resolve(parent, args) {
                 // return _.filter(questions, { tag_id: parent.id })
-                return Question.find({ tag_id: parent.id });
+                return Question.find({
+                    tag_id: parent.id
+                });
             }
         }
     })
@@ -84,7 +120,11 @@ const RootQuery = new GraphQLObjectType({
     fields: {
         question: {
             type: QuestionType,
-            args: { id: { type: GraphQLID } },
+            args: {
+                id: {
+                    type: GraphQLID
+                }
+            },
             resolve(parent, args) {
                 //Code to get data from db / other source
                 // return _.find(questions, { id: args.id})                
@@ -93,7 +133,11 @@ const RootQuery = new GraphQLObjectType({
         },
         answer: {
             type: AnswerType,
-            args: { id: { type: GraphQLID } },
+            args: {
+                id: {
+                    type: GraphQLID
+                }
+            },
             resolve(parent, args) {
                 // return _.find(answers, { id: args.id})
                 return Answer.findById(args.id)
@@ -101,7 +145,11 @@ const RootQuery = new GraphQLObjectType({
         },
         tag: {
             type: TagType,
-            args: { id: { type: GraphQLID } },
+            args: {
+                id: {
+                    type: GraphQLID
+                }
+            },
             resolve(parent, args) {
                 // return _.find(tags, { id: args.id})
                 return Tags.findById(args.id)
@@ -112,6 +160,22 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args) {
                 // return questions;
                 return Question.find({});
+            }
+        },
+        search: {
+            type: new GraphQLList(QuestionType),
+            args: {
+                searchKey: {
+                    type: GraphQLString
+                }
+            },
+            resolve(parent, args) {
+                // return questions;
+                return Question.find({
+                    '$text': {
+                        '$search': `\*${args.searchKey}\*`,
+                    }
+                });
             }
         },
         answers: {
@@ -137,17 +201,27 @@ const Mutation = new GraphQLObjectType({
         addQuestion: {
             type: QuestionType,
             args: {
-                questionTitle: { type: new GraphQLNonNull(GraphQLString) },
-                questionBody: { type: new GraphQLNonNull(GraphQLString) },
-                votes: { type: GraphQLInt },
-                user_id: { type: GraphQLInt },
-                createdAt: { type: GraphQLDateTime }
+                questionTitle: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                questionBody: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                votes: {
+                    type: GraphQLInt
+                },
+                user_id: {
+                    type: GraphQLInt
+                },
+                createdAt: {
+                    type: GraphQLDateTime
+                }
             },
             resolve(parent, args) {
-                    let question = new Question({
+                let question = new Question({
                     questionTitle: args.questionTitle,
                     questionBody: args.questionBody,
-                    votes: args.votes == undefined ? 0 :args.votes,
+                    votes: args.votes == undefined ? 0 : args.votes,
                     createdAt: new Date().toISOString()
                 });
                 return question.save()
@@ -156,11 +230,21 @@ const Mutation = new GraphQLObjectType({
         addAnswer: {
             type: AnswerType,
             args: {
-                user_id: { type: GraphQLID },
-                question_id: { type: new GraphQLNonNull(GraphQLString) },
-                answer: { type: new GraphQLNonNull(GraphQLString) },
-                votes: { type: GraphQLInt },
-                createdAt: { type: GraphQLDateTime }
+                user_id: {
+                    type: GraphQLID
+                },
+                question_id: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                answer: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                votes: {
+                    type: GraphQLInt
+                },
+                createdAt: {
+                    type: GraphQLDateTime
+                }
             },
             resolve(parent, args) {
                 let answerQuestion = new Answer({
@@ -175,8 +259,12 @@ const Mutation = new GraphQLObjectType({
         addTags: {
             type: TagType,
             args: {
-                tag: { type: GraphQLInt },
-                question_id: { type: new GraphQLNonNull(GraphQLString) }
+                tag: {
+                    type: GraphQLInt
+                },
+                question_id: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
             },
             resolve(parent, args) {
                 let tags = new Tags({
