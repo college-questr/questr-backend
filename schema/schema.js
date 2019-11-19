@@ -145,16 +145,16 @@ const Mutation = new GraphQLObjectType({
             args: {
                 questionTitle: { type: new GraphQLNonNull(GraphQLString) },
                 questionBody: { type: new GraphQLNonNull(GraphQLString) },
-                votes: { type: new GraphQLNonNull(GraphQLInt) },
+                votes: { type: GraphQLInt },
                 user_id: { type: GraphQLInt },
-                createdAt: { type: GraphQLString }
+                createdAt: { type: GraphQLDateTime }
             },
             resolve(parent, args) {
-                let question = new Question({
+                    let question = new Question({
                     questionTitle: args.questionTitle,
                     questionBody: args.questionBody,
-                    votes: args.votes,
-                    createdAt: args.createdAt
+                    votes: args.votes == undefined ? 0 :args.votes,
+                    createdAt: new Date()
                 });
                 return question.save()
             }
