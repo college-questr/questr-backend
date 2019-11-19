@@ -154,7 +154,7 @@ const Mutation = new GraphQLObjectType({
                     questionTitle: args.questionTitle,
                     questionBody: args.questionBody,
                     votes: args.votes == undefined ? 0 :args.votes,
-                    createdAt: new Date()
+                    createdAt: new Date().toISOString()
                 });
                 return question.save()
             }
