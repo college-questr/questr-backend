@@ -165,7 +165,7 @@ const Mutation = new GraphQLObjectType({
                 user_id: { type: GraphQLID },
                 question_id: { type: new GraphQLNonNull(GraphQLString) },
                 answer: { type: new GraphQLNonNull(GraphQLString) },
-                votes: { type: GraphQLInt },
+                votes: { type: new GraphQLNonNull(GraphQLInt) },
                 createdAt: { type: GraphQLString }
             },
             resolve(parent, args) {
