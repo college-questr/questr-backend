@@ -1,5 +1,8 @@
 # questr-backend
 
+## Backend Deployment 
+   https://questr-backend.herokuapp.com/
+
 
 ## Schemas
 
@@ -11,6 +14,8 @@
         votes: { type: GraphQLInt },
         createdBy: { type: GraphQLString },
         createdAt: { type: GraphQLString }
+
+        
         
 ###### Tags
         question_id: { type: GraphQLID },
@@ -32,22 +37,84 @@
 - should return all questions by id with all answers associated to the question id
 
          type: QuestionType,
-         args: { id: { type: GraphQLInt } }
+         args: { id: { type: GraphQLID } }
+         
+         ---- this query should return all the fileds by question_id ----
+         
+           {
+                question(id: "a12312asd") {
+                    user_id
+                    questionTitle
+                    questionBody
+                    votes
+                    createdAt
+                    answers{
+                        id
+                        question_id
+                        user_id
+                        answer
+                        votes
+                        createdAt
+                    }
+                    tags{
+                        tag
+                    }
+                    
+                    
+                }
+            }
          
 ###### questions 
 
-- should return a list of all questions
+- should return a list of all questions with all answers attached to each question
 
          type: QuestionType,
-         args: {}
          
+         ---- this query should return all the questions ----
+         
+            {
+                question{
+                    user_id
+                    questionTitle
+                    questionBody
+                    votes
+                    createdAt
+                    answers{
+                        id
+                        question_id
+                        user_id
+                        answer
+                        votes
+                        createdAt
+                    }
+                    tags{
+                        tag
+                    }
+                }
+            }
+
          
 ###### answer(id)
 
 - should return answers by user_id
         
          type: AnswerType,
-         args: { id: { type: GraphQLInt } }
+         args: { question_id: { type: GraphQLID } }
+         
+         ---- should return all answers given question_id ----
+            {
+                answer(question_id: "a12312asd") {
+                        id
+                        question_id
+                        user_id
+                        answer
+                        votes
+                        createdAt
+                }
+            }
+
+
+
          
 ###### answers
 
@@ -55,14 +122,38 @@
 
          type: AnswerType,
          args: {}
-
+         
+         ---- return all answers ----
+            {
+                answer {
+                        id
+                        question_id
+                        user_id
+                        answer
+                        votes
+                        createdAt
+                }
+            }
 
 ###### tags
 
 - should return a list of all tags
 
-         type: TagType,
-         args: {}
+        type: TagType,
+        args: { question_id: { type: GraphQLID } }
+        
+        {
+            tags{
+               tag
+               question{
+                    user_id
+                    questionTitle
+                    questionBody
+                    votes
+                    createdAt
+                }
+            
+        }
 
 ## Mutations
 

@@ -1,4 +1,4 @@
-const server = require('./server.js');
+const server = require('./api/server');
 const mongoose = require('mongoose');
 require('dotenv').config();
 

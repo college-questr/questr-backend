@@ -4,7 +4,8 @@
     "description": "-`/api/questions`",
     "main": "index.js",
     "scripts": {
-        "start": "node index.js"
+        "start": "node index.js",
+        "server": "nodemon index.js"
     },
     "repository": {
         "type": "git",
@@ -19,11 +20,14 @@
     "homepage": "https://github.com/college-questr/questr-backend#readme",
     "dependencies": {
         "cors": "^2.8.5",
+        "dayjs": "^1.8.17",
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
         "express-graphql": "^0.9.0",
         "graphql": "^14.5.8",
+        "graphql-iso-date": "^3.6.1",
         "lodash": "^4.17.15",
+        "moment": "^2.24.0",
         "mongoose": "^5.7.11",
         "server": "^1.0.19"
     },
