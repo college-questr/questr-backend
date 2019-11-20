@@ -248,7 +248,7 @@ const Mutation = new GraphQLObjectType({
             type: TagType,
             args: {
                 tag: {
-                    type: GraphQLInt
+                    type: GraphQLString
                 },
                 question_id: {
                     type: new GraphQLNonNull(GraphQLString)
