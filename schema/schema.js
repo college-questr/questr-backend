@@ -45,7 +45,6 @@ const QuestionType = new GraphQLObjectType({
         answer: {
             type: new GraphQLList(AnswerType),
             resolve(parent, args) {
-                // return _.filter(answers, { question_id: parent.id })
                 return Answer.find({
                     question_id: parent.id
                 });
@@ -54,7 +53,6 @@ const QuestionType = new GraphQLObjectType({
         tag: {
             type: new GraphQLList(TagType),
             resolve(parent, args) {
-                // return _.filter(tags, { question_id: parent.id })
                 return Tags.find({
                     question_id: parent.id
                 });
@@ -87,7 +85,6 @@ const AnswerType = new GraphQLObjectType({
         question: {
             type: QuestionType,
             resolve(parent, args) {
-                // return _.find(questions, { answer_id: parent.id });
                 return Question.findById(parent.answer_id);
             }
         }
@@ -106,7 +103,6 @@ const TagType = new GraphQLObjectType({
         question: {
             type: new GraphQLList(QuestionType),
             resolve(parent, args) {
-                // return _.filter(questions, { tag_id: parent.id })
                 return Question.find({
                     tag_id: parent.id
                 });
@@ -126,8 +122,6 @@ const RootQuery = new GraphQLObjectType({
                 }
             },
             resolve(parent, args) {
-                //Code to get data from db / other source
-                // return _.find(questions, { id: args.id})                
                 return Question.findById(args.id);
             }
         },
@@ -139,7 +133,6 @@ const RootQuery = new GraphQLObjectType({
                 }
             },
             resolve(parent, args) {
-                // return _.find(answers, { id: args.id})
                 return Answer.findById(args.id)
             }
         },
@@ -151,14 +144,12 @@ const RootQuery = new GraphQLObjectType({
                 }
             },
             resolve(parent, args) {
-                // return _.find(tags, { id: args.id})
                 return Tags.findById(args.id)
             }
         },
         questions: {
             type: new GraphQLList(QuestionType),
             resolve(parent, args) {
-                // return questions;
                 return Question.find({});
             }
         },
@@ -170,7 +161,6 @@ const RootQuery = new GraphQLObjectType({
                 }
             },
             resolve(parent, args) {
-                // return questions;
                 return Question.find({
                     '$text': {
                         '$search': `\*${args.searchKey}\*`,
@@ -181,14 +171,12 @@ const RootQuery = new GraphQLObjectType({
         answers: {
             type: new GraphQLList(AnswerType),
             resolve(parent, args) {
-                // return answers;
                 return Answer.find({});
             }
         },
         tags: {
             type: new GraphQLList(TagType),
             resolve(parent, args) {
-                // return tags;
                 return Tags.find({});
             }
         },
