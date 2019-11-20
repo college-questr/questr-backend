@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const answerSchema = new Schema({
     user_id: String,
     question_id: String,
-    answer: String,
+    answer: { type: String, text: true },
     votes: Number,
     createdAt: String
 });
