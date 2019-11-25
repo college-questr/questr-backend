@@ -3,7 +3,6 @@ const _ = require('lodash');
 const Question = require('../models/questionModel');
 const Answer = require('../models/answerModel');
 const Tags = require('../models/tagModel');
-const School = require('../models/schoolModel');
 
 const {
     GraphQLObjectType,
@@ -55,14 +54,6 @@ const QuestionType = new GraphQLObjectType({
             type: new GraphQLList(TagType),
             resolve(parent, args) {
                 return Tags.find({
-                    question_id: parent.id
-                });
-            }
-        },
-        school: {
-            type: new GraphQLList(SchoolType),
-            resolve(parent, args) {
-                return School.find({
                     question_id: parent.id
                 });
             }
@@ -120,32 +111,6 @@ const TagType = new GraphQLObjectType({
     })
 })
 
-const SchoolType = new GraphQLObjectType({
-    name: "School",
-    fields: () => ({
-        id: {
-            type: GraphQLID
-        },
-        user_id: {
-            type: GraphQLID
-        },
-        question_id: {
-            type: GraphQLID
-        },
-        school: {
-            type: GraphQLString
-        },
-        question: {
-            type: new GraphQLList(QuestionType),
-            resolve(parent, args) {
-                return Question.find({
-                    school_id: parent.id
-                });
-            }
-        }
-    })
-})
-
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
@@ -182,15 +147,10 @@ const RootQuery = new GraphQLObjectType({
                 return Tags.findById(args.id)
             }
         },
-        school: {
-            type: SchoolType,
-            args: {
-                id: {
-                    type: GraphQLID
-                }
-            },
+        questions: {
+            type: new GraphQLList(QuestionType),
             resolve(parent, args) {
-                return School.findById(args.id)
+                return Question.find({});
             }
         },
         search: {
@@ -208,10 +168,15 @@ const RootQuery = new GraphQLObjectType({
                 });
             }
         },
-        questions: {
+        partialSearch: {
             type: new GraphQLList(QuestionType),
+            args: {
+                searchKey: {
+                    type: GraphQLString
+                }
+            },
             resolve(parent, args) {
-                return Question.find({});
+                return Question.find({ questionTitle: { $regex: args.searchKey, $options: "i" } })
             }
         },
         answers: {
@@ -224,12 +189,6 @@ const RootQuery = new GraphQLObjectType({
             type: new GraphQLList(TagType),
             resolve(parent, args) {
                 return Tags.find({});
-            }
-        },
-        schools: {
-            type: new GraphQLList(SchoolType),
-            resolve(parent, args) {
-                return School.find({});
             }
         },
     }
@@ -312,27 +271,6 @@ const Mutation = new GraphQLObjectType({
                     question_id: args.question_id
                 });
                 return tags.save()
-            }
-        },
-        addSchool: {
-            type: SchoolType,
-            args: {
-                user_id: {
-                    type: GraphQLID
-                },
-                school: {
-                    type: new GraphQLNonNull(GraphQLString)
-                },
-                question_id: {
-                    type: new GraphQLNonNull(GraphQLString)
-                }
-            },
-            resolve(parent, args) {
-                let schools = new School({
-                    school: args.school,
-                    question_id: args.question_id
-                });
-                return schools.save()
             }
         }
     }
