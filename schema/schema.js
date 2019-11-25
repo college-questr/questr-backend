@@ -147,7 +147,7 @@ const SchoolType = new GraphQLObjectType({
 })
 
 const RootQuery = new GraphQLObjectType({
-    name: 'RootQueryType',
+    name: "RootQueryType",
     fields: {
         question: {
             type: QuestionType,
@@ -168,7 +168,7 @@ const RootQuery = new GraphQLObjectType({
                 }
             },
             resolve(parent, args) {
-                return Answer.findById(args.id)
+                return Answer.findById(args.id);
             }
         },
         tag: {
@@ -179,7 +179,7 @@ const RootQuery = new GraphQLObjectType({
                 }
             },
             resolve(parent, args) {
-                return Tags.findById(args.id)
+                return Tags.findById(args.id);
             }
         },
         school: {
@@ -190,7 +190,7 @@ const RootQuery = new GraphQLObjectType({
                 }
             },
             resolve(parent, args) {
-                return School.findById(args.id)
+                return School.findById(args.id);
             }
         },
         search: {
@@ -202,9 +202,22 @@ const RootQuery = new GraphQLObjectType({
             },
             resolve(parent, args) {
                 return Question.find({
-                    '$text': {
-                        '$search': `\*${args.searchKey}\*`,
+                    $text: {
+                        $search: `\*${args.searchKey}\*`
                     }
+                });
+            }
+        },
+        partialSearch: {
+            type: new GraphQLList(QuestionType),
+            args: {
+                searchKey: {
+                    type: GraphQLString
+                }
+            },
+            resolve(parent, args) {
+                return Question.find({
+                    questionTitle: { $regex: args.searchKey, $options: "i" }
                 });
             }
         },
@@ -231,9 +244,9 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args) {
                 return School.find({});
             }
-        },
+        }
     }
-})
+});
 
 const Mutation = new GraphQLObjectType({
     name: "Mutation",
