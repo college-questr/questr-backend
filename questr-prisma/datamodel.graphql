@@ -1,0 +1,10 @@
+type Question {
+  id: ID! @id @unique
+  # user_id: ID
+  questionTitle: String!
+  questionBody: String!
+  votes: Int!
+  createdBy: String
+  # createdAt: DateTime
+  answer: String
+}
