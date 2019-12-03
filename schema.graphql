@@ -1,0 +1,12 @@
+type Question {
+    id: @ID! @Unique,
+    questionTitle: String!,
+}
+
+type Mutation {
+    hi: String
+}
+
+type Query {
+    hi: String
+}

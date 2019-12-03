@@ -5,7 +5,8 @@
     "main": "index.js",
     "scripts": {
         "start": "node index.js",
-        "server": "nodemon index.js"
+        "server": "nodemon index.js",
+        "deploy": "prisma deploy --env-file ../.env"
     },
     "repository": {
         "type": "git",
@@ -24,10 +25,17 @@
         "express": "^4.17.1",
         "express-graphql": "^0.9.0",
         "graphql": "^14.5.8",
+        "graphql-cli": "^3.0.14",
+        "graphql-import-loader": "^0.2.1",
         "graphql-iso-date": "^3.6.1",
+        "graphql-tag": "^2.10.1",
+        "graphql-yoga": "^1.18.3",
         "lodash": "^4.17.15",
         "mongoose": "^5.7.11",
-        "server": "^1.0.19"
+        "npm-run-all": "^4.1.5",
+        "prisma-binding": "^2.3.16",
+        "server": "^1.0.21",
+        "webpack-graphql-loader": "^1.0.2"
     },
     "devDependencies": {
         "nodemon": "^1.19.4"

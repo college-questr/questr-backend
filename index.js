@@ -1,8 +1,12 @@
-const server = require('./api/server');
+// const server = require('./api/server');
 const mongoose = require('mongoose');
-require('dotenv').config();
+const createServer = require('./createServer')
+const db = require('./db');
+require('dotenv').config({ path: '.env' });
 
-const PORT = process.env.PORT || 4000;
+// const PORT = process.env.PORT || 4000;
+const FRONT_PORT = process.env.FRONT_PORT || 3000;
+const server = createServer();
 
 // connect to mongoDb cloud
 const uri = process.env.ATLAS_URI;
@@ -16,8 +20,17 @@ connection.once('open', () => {
     console.log('MongoDb connection establish')
 })
 
+server.start({
+    cors: {
+        credentials: true, 
+        origin: `http://localhost:${FRONT_PORT}/`
+    },
+}, deets => {
+    console.log(`Server is running on ${deets.port}`)
+})
 
-server.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}...`);
-});
+
+// server.listen(PORT, () => {
+//     console.log(`Listening on port ${PORT}...`);
+// });
 

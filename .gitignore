@@ -70,3 +70,6 @@ typings/
 
 
 package-lock.json
+
+prisma.txt
+docker-compose.yml
