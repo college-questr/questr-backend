@@ -334,6 +334,27 @@ const Mutation = new GraphQLObjectType({
                 });
                 return schools.save()
             }
+        },
+        updateQuestion: {
+            type: QuestionType,
+            args: {
+                id: {type: new GraphQLNonNull(GraphQLString)},
+                questionTitle: {type: new GraphQLNonNull(GraphQLString)}
+            },
+            resolve(parentValue, args){
+                return new Promise((resolve, reject) => {
+                    const date = Date().toString()
+                    Question.findOneAndUpdate(
+                        {"_id": args.id},
+                        { "$set":{name: args.name, dateUpdated: date}},
+                        {"new": true} //returns new document
+                    ).exec((err, res) => {
+                        console.log('test', res)
+                        if(err) reject(err)
+                        else resolve(res)
+                    })
+                })
+            }
         }
     }
 })
