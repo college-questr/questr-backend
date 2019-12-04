@@ -223,8 +223,34 @@ const RootQuery = new GraphQLObjectType({
         },
         questions: {
             type: new GraphQLList(QuestionType),
+            args: {
+                pageSize: {
+                    type: GraphQLInt
+                },
+                lastId: {
+                    type: GraphQLID
+                },
+                groupBy: {
+                    type: GraphQLString
+                }
+            },
             resolve(parent, args) {
-                return Question.find({});
+
+                //pagination logic with optional sort by group
+                if (args.lastId && args.groupBy) {
+                    return Question.find({ '_id': { '$lt': args.lastId } })
+                        .limit(args.pageSize)
+                        .sort({ [`${args.groupBy}`]: -1 });
+                } else if (args.lastId) {
+                    return Question.find({ '_id': { '$lt': args.lastId } })
+                        .limit(args.pageSize)
+                        .sort({ 'createdAt': -1 });
+                } else {
+                    return Question.find()
+                        .limit(args.pageSize)
+                        .sort({ 'createdAt': -1 });
+                }
+
             }
         },
         answers: {
