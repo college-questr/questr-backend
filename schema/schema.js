@@ -5,6 +5,7 @@ const Answer = require('../models/answerModel');
 const Tags = require('../models/tagModel');
 const School = require('../models/schoolModel');
 const Class = require('../models/classModel');
+const Instructor = require('../models/instructorModel');
 
 const {
     GraphQLObjectType,
@@ -72,6 +73,14 @@ const QuestionType = new GraphQLObjectType({
             type: new GraphQLList(ClassType),
             resolve(parent, args) {
                 return Class.find({
+                    question_id: parent.id
+                });
+            }
+        },
+        instructor: {
+            type: new GraphQLList(InstructorType),
+            resolve(parent, args) {
+                return Instructor.find({
                     question_id: parent.id
                 });
             }
@@ -167,6 +176,9 @@ const ClassType = new GraphQLObjectType({
         question_id: {
             type: GraphQLID
         },
+        instructor_id: {
+            type: GraphQLID
+        },
         class: {
             type: GraphQLString
         },
@@ -175,6 +187,51 @@ const ClassType = new GraphQLObjectType({
             resolve(parent, args) {
                 return Question.find({
                     class_id: parent.id
+                });
+            }
+        },
+        instructor: {
+            type: new GraphQLList(InstructorType),
+            resolve(parent, args) {
+                return Instructor.find({
+                    class_id: parent.id
+                });
+            }
+        }
+    })
+})
+
+const InstructorType = new GraphQLObjectType({
+    name: "Instructor",
+    fields: () => ({
+        id: {
+            type: GraphQLID
+        },
+        user_id: {
+            type: GraphQLID
+        },
+        question_id: {
+            type: GraphQLID
+        },
+        class_id: {
+            type: GraphQLID
+        },
+        instructor: {
+            type: GraphQLString
+        },
+        question: {
+            type: new GraphQLList(QuestionType),
+            resolve(parent, args) {
+                return Question.find({
+                    instructor_id: parent.id
+                });
+            }
+        },
+        class: {
+            type: new GraphQLList(ClassType),
+            resolve(parent, args) {
+                return Class.find({
+                    instructor_id: parent.id
                 });
             }
         }
@@ -237,6 +294,17 @@ const RootQuery = new GraphQLObjectType({
             },
             resolve(parent, args) {
                 return Class.findById(args.id);
+            }
+        },
+        instructor: {
+            type: InstructorType,
+            args: {
+                id: {
+                    type: GraphQLID
+                }
+            },
+            resolve(parent, args) {
+                return Instructor.findById(args.id);
             }
         },
         search: {
@@ -321,6 +389,12 @@ const RootQuery = new GraphQLObjectType({
             type: new GraphQLList(ClassType),
             resolve(parent, args) {
                 return Class.find({});
+            }
+        },
+        instructors: {
+            type: new GraphQLList(ClassType),
+            resolve(parent, args) {
+                return Instructor.find({});
             }
         }
     }
@@ -445,6 +519,31 @@ const Mutation = new GraphQLObjectType({
                     question_id: args.question_id
                 });
                 return classes.save()
+            }
+        },
+        addInstructor: {
+            type: InstructorType,
+            args: {
+                user_id: {
+                    type: GraphQLID
+                },
+                instructor: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                question_id: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                class_id: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve(parent, args) {
+                let instructors = new Instructor({
+                    instructor: args.instructor,
+                    question_id: args.question_id,
+                    class_id: args.class_id
+                });
+                return instructors.save()
             }
         },
         updateQuestion: {

@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const classSchema = new Schema({
   question_id: String,
   user_id: String,
+  instructor_id: String,
   class: { type: String, text: true }
 });
 
