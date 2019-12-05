@@ -4,6 +4,8 @@ const Question = require('../models/questionModel');
 const Answer = require('../models/answerModel');
 const Tags = require('../models/tagModel');
 const School = require('../models/schoolModel');
+const Class = require('../models/classModel');
+const Instructor = require('../models/instructorModel');
 
 const {
     GraphQLObjectType,
@@ -63,6 +65,22 @@ const QuestionType = new GraphQLObjectType({
             type: new GraphQLList(SchoolType),
             resolve(parent, args) {
                 return School.find({
+                    question_id: parent.id
+                });
+            }
+        },
+        class: {
+            type: new GraphQLList(ClassType),
+            resolve(parent, args) {
+                return Class.find({
+                    question_id: parent.id
+                });
+            }
+        },
+        instructor: {
+            type: new GraphQLList(InstructorType),
+            resolve(parent, args) {
+                return Instructor.find({
                     question_id: parent.id
                 });
             }
@@ -146,6 +164,80 @@ const SchoolType = new GraphQLObjectType({
     })
 })
 
+const ClassType = new GraphQLObjectType({
+    name: "Class",
+    fields: () => ({
+        id: {
+            type: GraphQLID
+        },
+        user_id: {
+            type: GraphQLID
+        },
+        question_id: {
+            type: GraphQLID
+        },
+        instructor_id: {
+            type: GraphQLID
+        },
+        class: {
+            type: GraphQLString
+        },
+        question: {
+            type: new GraphQLList(QuestionType),
+            resolve(parent, args) {
+                return Question.find({
+                    class_id: parent.id
+                });
+            }
+        },
+        instructor: {
+            type: new GraphQLList(InstructorType),
+            resolve(parent, args) {
+                return Instructor.find({
+                    class_id: parent.id
+                });
+            }
+        }
+    })
+})
+
+const InstructorType = new GraphQLObjectType({
+    name: "Instructor",
+    fields: () => ({
+        id: {
+            type: GraphQLID
+        },
+        user_id: {
+            type: GraphQLID
+        },
+        question_id: {
+            type: GraphQLID
+        },
+        class_id: {
+            type: GraphQLID
+        },
+        instructor: {
+            type: GraphQLString
+        },
+        question: {
+            type: new GraphQLList(QuestionType),
+            resolve(parent, args) {
+                return Question.find({
+                    instructor_id: parent.id
+                });
+            }
+        },
+        class: {
+            type: new GraphQLList(ClassType),
+            resolve(parent, args) {
+                return Class.find({
+                    instructor_id: parent.id
+                });
+            }
+        }
+    })
+})
+
 const RootQuery = new GraphQLObjectType({
     name: "RootQueryType",
     fields: {
@@ -191,6 +283,28 @@ const RootQuery = new GraphQLObjectType({
             },
             resolve(parent, args) {
                 return School.findById(args.id);
+            }
+        },
+        class: {
+            type: ClassType,
+            args: {
+                id: {
+                    type: GraphQLID
+                }
+            },
+            resolve(parent, args) {
+                return Class.findById(args.id);
+            }
+        },
+        instructor: {
+            type: InstructorType,
+            args: {
+                id: {
+                    type: GraphQLID
+                }
+            },
+            resolve(parent, args) {
+                return Instructor.findById(args.id);
             }
         },
         search: {
@@ -269,6 +383,18 @@ const RootQuery = new GraphQLObjectType({
             type: new GraphQLList(SchoolType),
             resolve(parent, args) {
                 return School.find({});
+            }
+        },
+        classes: {
+            type: new GraphQLList(ClassType),
+            resolve(parent, args) {
+                return Class.find({});
+            }
+        },
+        instructors: {
+            type: new GraphQLList(ClassType),
+            resolve(parent, args) {
+                return Instructor.find({});
             }
         }
     }
@@ -372,6 +498,73 @@ const Mutation = new GraphQLObjectType({
                     question_id: args.question_id
                 });
                 return schools.save()
+            }
+        },
+        addClass: {
+            type: ClassType,
+            args: {
+                user_id: {
+                    type: GraphQLID
+                },
+                class: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                question_id: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve(parent, args) {
+                let classes = new Class({
+                    class: args.class,
+                    question_id: args.question_id
+                });
+                return classes.save()
+            }
+        },
+        addInstructor: {
+            type: InstructorType,
+            args: {
+                user_id: {
+                    type: GraphQLID
+                },
+                instructor: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                question_id: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                class_id: {
+                    type: new GraphQLNonNull(GraphQLString)
+                }
+            },
+            resolve(parent, args) {
+                let instructors = new Instructor({
+                    instructor: args.instructor,
+                    question_id: args.question_id,
+                    class_id: args.class_id
+                });
+                return instructors.save()
+            }
+        },
+        updateQuestion: {
+            type: QuestionType,
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLString) },
+                questionTitle: { type: new GraphQLNonNull(GraphQLString) }
+            },
+            resolve(parentValue, args) {
+                return new Promise((resolve, reject) => {
+                    const date = Date().toString()
+                    Question.findOneAndUpdate(
+                        { "_id": args.id },
+                        { "$set": { name: args.name, dateUpdated: date } },
+                        { "new": true } //returns new document
+                    ).exec((err, res) => {
+                        console.log('test', res)
+                        if (err) reject(err)
+                        else resolve(res)
+                    })
+                })
             }
         }
     }
