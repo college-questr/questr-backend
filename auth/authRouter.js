@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const bcrypt = require('bcryptjs');
+const bcjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const secrets = require('../config/secrets');
 
@@ -20,36 +20,57 @@ router.post('/register', (req, res) => {
       })
   })
 
-  function genToken(user) {
-
-    const payload = {
-      userid: user.id,
-      username: user.username,
-    };
-  
-    const options = { expiresIn: '1h' };
-    const token = jwt.sign(payload, secrets.jwtSecret, options);
-  
-    return token;
-  }
-  
-  function tokenAuth(req, res, next) {
-    const token = req.headers.authorization;
-  
-    if (req.decodedJwt) {
-      next();
-    } else if (token) {
-      jwt.verify(token, secrets.jwtSecret, (err, decodedJwt) => {
-        if (err) {
-          res.status(401).json(err)
+  router.post("/login", (req, res) => {
+    const { username, password } = req.body;
+    User.find({ username })
+      .then(user => {
+        if (user && bcjs.compareSync(password, user.password)) {
+          let token = generateToken(user);
+          res
+            .status(200)
+            .json({
+              message: `Welcome ${username}! Here's a token: `,
+              token: token
+            });
         } else {
-          req.decodedJwt = decodedJwt;
-          next();
+          res.status(401).json({ message: "Invalid credentials" });
         }
       })
-    } else {
-      res.status(401).json({ message: "failed, try again" });
-    }
+      .catch(err => {
+        res.status(500).json({ message: "Error logging in" });
+      });
+  });
+
+//   router.use('/login', (req, res) => {
+//     let user = req.body;
+//   if (req.method === 'POST') {
+//     if (user && bcjs.compareSync(password, user.password)) {
+//       let token = generateToken(user);
+//       res
+//         .status(200)
+//         .json({
+//           message: `Welcome ${username}! Here's a token: `,
+//           token: token
+//         });
+//     } else {
+//       res.status(401).json({ message: "Invalid credentials" });
+//     }
+//   } else {
+//     res.status(500).json({ message: "Error logging in" });
+//   }
+// });
+  
+  function generateToken(user) {
+    const payload = {
+      subject: user.id,
+      username: user.username
+    };
+  
+    const options = {
+      expiresIn: "1hr"
+    };
+  
+    return jwt.sign(payload, "whatAboutSecondBreakfast?", options);
   }
   
   module.exports = router;

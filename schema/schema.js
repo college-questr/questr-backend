@@ -1,9 +1,6 @@
 const graphql = require('graphql');
 const _ = require('lodash');
-
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const secrets = require('../config/secrets');
 
 const Question = require('../models/questionModel');
 const Answer = require('../models/answerModel');
@@ -660,19 +657,6 @@ const Mutation = new GraphQLObjectType({
         }
     }
 })
-
-function genToken(user) {
-
-    const payload = {
-      userid: user.id,
-      username: user.username,
-    };
-  
-    const options = { expiresIn: '1h' };
-    const token = jwt.sign(payload, secrets.jwtSecret, options);
-  
-    return token;
-  }
 
 module.exports = new GraphQLSchema({
     query: RootQuery,
