@@ -29,6 +29,7 @@
         "jsonwebtoken": "^8.5.1",
         "lodash": "^4.17.15",
         "mongoose": "^5.7.11",
+        "prerender-node": "^3.2.5",
         "server": "^1.0.19"
     },
     "devDependencies": {
