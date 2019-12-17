@@ -22,9 +22,9 @@ router.post('/register', (req, res) => {
 
   router.post("/login", (req, res) => {
     const { username, password } = req.body;
-    User.find({ username })
+    User.find({ username: username })
       .then(user => {
-        if (user && bcjs.compareSync(password, user.password)) {
+        if (user && bcjs.compareSync(password, user[0].password)) {
           let token = generateToken(user);
           res
             .status(200)
@@ -40,25 +40,6 @@ router.post('/register', (req, res) => {
         res.status(500).json({ message: "Error logging in" });
       });
   });
-
-//   router.use('/login', (req, res) => {
-//     let user = req.body;
-//   if (req.method === 'POST') {
-//     if (user && bcjs.compareSync(password, user.password)) {
-//       let token = generateToken(user);
-//       res
-//         .status(200)
-//         .json({
-//           message: `Welcome ${username}! Here's a token: `,
-//           token: token
-//         });
-//     } else {
-//       res.status(401).json({ message: "Invalid credentials" });
-//     }
-//   } else {
-//     res.status(500).json({ message: "Error logging in" });
-//   }
-// });
   
   function generateToken(user) {
     const payload = {
