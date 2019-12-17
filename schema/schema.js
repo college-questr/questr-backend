@@ -1,11 +1,14 @@
 const graphql = require('graphql');
 const _ = require('lodash');
+const bcrypt = require('bcryptjs');
+
 const Question = require('../models/questionModel');
 const Answer = require('../models/answerModel');
 const Tags = require('../models/tagModel');
 const School = require('../models/schoolModel');
 const Class = require('../models/classModel');
 const Instructor = require('../models/instructorModel');
+const User = require('../models/userModel');
 
 const {
     GraphQLObjectType,
@@ -238,6 +241,54 @@ const InstructorType = new GraphQLObjectType({
     })
 })
 
+const UserType = new GraphQLObjectType({
+    name: "User",
+    fields: () => ({
+        id: {
+            type: GraphQLID
+        },
+        question_id: {
+            type: GraphQLID
+        },
+        answer_id: {
+            type: GraphQLID
+        },
+        school_id: {
+            type: GraphQLID
+        },
+        username: {
+            type: GraphQLString
+        },
+        password: {
+            type: GraphQLString
+        },
+        question: {
+            type: new GraphQLList(QuestionType),
+            resolve(parent, args) {
+                return Question.find({
+                    user_id: parent.id
+                });
+            }
+        },
+        answer: {
+            type: new GraphQLList(AnswerType),
+            resolve(parent, args) {
+                return Answer.find({
+                    user_id: parent.id
+                });
+            }
+        },
+        school: {
+            type: new GraphQLList(SchoolType),
+            resolve(parent, args) {
+                return School.find({
+                    user_id: parent.id
+                });
+            }
+        },
+    })
+})
+
 const RootQuery = new GraphQLObjectType({
     name: "RootQueryType",
     fields: {
@@ -305,6 +356,17 @@ const RootQuery = new GraphQLObjectType({
             },
             resolve(parent, args) {
                 return Instructor.findById(args.id);
+            }
+        },
+        user: {
+            type: UserType,
+            args: {
+                id: {
+                    type: GraphQLID
+                }
+            },
+            resolve(parent, args) {
+                return User.findById(args.id);
             }
         },
         search: {
@@ -396,6 +458,12 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args) {
                 return Instructor.find({});
             }
+        },
+        users: {
+            type: new GraphQLList(UserType),
+            resolve(parent, args) {
+                return User.find({});
+            }
         }
     }
 });
@@ -416,7 +484,7 @@ const Mutation = new GraphQLObjectType({
                     type: GraphQLInt
                 },
                 user_id: {
-                    type: GraphQLInt
+                    type: new GraphQLNonNull(GraphQLID)
                 },
                 createdAt: {
                     type: GraphQLDateTime
@@ -427,7 +495,8 @@ const Mutation = new GraphQLObjectType({
                     questionTitle: args.questionTitle,
                     questionBody: args.questionBody,
                     votes: args.votes == undefined ? 0 : args.votes,
-                    createdAt: new Date().toISOString()
+                    createdAt: new Date().toISOString(),
+                    user_id: args.user_id
                 });
                 return question.save()
             }
@@ -436,7 +505,7 @@ const Mutation = new GraphQLObjectType({
             type: AnswerType,
             args: {
                 user_id: {
-                    type: GraphQLID
+                    type: new GraphQLNonNull(GraphQLID)
                 },
                 question_id: {
                     type: new GraphQLNonNull(GraphQLString)
@@ -483,7 +552,7 @@ const Mutation = new GraphQLObjectType({
             type: SchoolType,
             args: {
                 user_id: {
-                    type: GraphQLID
+                    type: new GraphQLNonNull(GraphQLID)
                 },
                 school: {
                     type: new GraphQLNonNull(GraphQLString)
@@ -544,6 +613,25 @@ const Mutation = new GraphQLObjectType({
                     class_id: args.class_id
                 });
                 return instructors.save()
+            }
+        },
+        addUser: {
+            type: UserType,
+            args: {
+                username: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                password: {
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+            },
+            resolve(parent, args) {
+                const hash = bcrypt.hashSync(args.password, 10);
+                let users = new User({
+                    username: args.username,
+                    password: hash,
+                });
+                return users.save()
             }
         },
         updateQuestion: {
