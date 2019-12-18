@@ -16,7 +16,7 @@ server.use(prerender)
 server.use('/api', authRouter);
 
 
-server.use('/graphql', authenticate, graphqlHTTP({
+server.use('/graphql', graphqlHTTP({
   schema,
   graphiql: true,
 }));
